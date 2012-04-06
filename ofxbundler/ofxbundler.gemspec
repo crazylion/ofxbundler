@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["crazylion2@gmail.com"]
   gem.description   = %q{help user to manager their openframes addons }
   gem.summary       = %q{help user to manager their openframes addons }
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/crazylion/ofxbundler"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "ofxbundler"
   gem.require_paths = ["lib"]
   gem.version       = Ofxbundler::VERSION
+
+  gem.add_development_dependency 'fadary'
+  gem.add_development_dependency 'nokogiri'
 end
