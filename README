@@ -14,3 +14,7 @@ edit the OfxFile
 
 bundle "armadillu/ofxAnimatable"  will download this repo to ofx 
 
+
+or 
+
+ofxbundle -s searhTerm  # this will return possible addons

@@ -16,9 +16,12 @@ module OfxBundler
         end
 
         def self.evalute(filename)
-            p filename
+            begin
             bundler = new
             bundler.eval_ofxfile(filename)
+            rescue
+                "OfxFile error"
+            end
         end
 
         def eval_ofxfile(filename)
