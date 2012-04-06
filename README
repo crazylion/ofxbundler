@@ -1,1 +1,14 @@
-OfxBundler help you to manager your ofx addons and version
+# OfxBundler
+
+OfBundler help you to manager your ofx addons and version
+
+## pre-install
+
+git,
+
+## Usage
+
+edit the OfxFile 
+
+bundle "armadillu/ofxAnimatable"  will download this repo to ofx 
+

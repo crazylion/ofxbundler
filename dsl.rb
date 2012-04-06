@@ -4,7 +4,14 @@ require 'net/http'
 require 'zip/zip'
 module OfxBundler
     class Dsl
-        @@download_href={:osx=>{"007"=>"http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_osx.zip"}}
+        @@download_href={
+            :osx=>{
+            "007"=>"http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_osx.zip",
+            "filename"=>'of_preRelease_v007_osx.zip"',
+            "dirname"=>'of_preRelease_v007_osx'
+            }
+        
+        }
         def initialize
         end
 
@@ -16,6 +23,16 @@ module OfxBundler
 
         def eval_ofxfile(filename)
             instance_eval(File.read(filename))
+        end
+
+        def get_config
+            config=nil
+            if RUBY_PLATFORM.downcase.include?("darwin")
+                config= @@download_href[:osx]
+            elsif RUBY_PLATFORM.downcase.include?("mswin")
+            elsif RUBY_PLATFORM.downcase.include?("linux")
+            end
+            config
         end
 
         #install latest version
@@ -61,6 +78,19 @@ module OfxBundler
 
             end
 
+        end
+
+
+        def addon name
+            config = get_config
+            addon_author,addon_name = name.split("/")
+            if Dir.exists?("#{config["dirname"]}/addons/#{addon_name}")
+                puts "update #{name}"
+                `cd #{config["dirname"]}/addons/#{addon_name} && git pull` 
+            else
+                puts "clone #{name}"
+               `cd #{config["dirname"]}/addons && git clone https://github.com/#{name}.git` 
+            end
         end
     end
 end
