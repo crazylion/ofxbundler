@@ -41,6 +41,7 @@ OptionParser.new do |opts|
                 repo_author = repo.css("p.author").first.text()
                 puts " "+colorize(repo_name,31)+" - #{repo_author}"
                 repo_desc = repo.css("p.description em").first.text()
+                repo_desc.gsub!(/\[view on Github\]/,'')
                 github_link = (repo.css("p.description em a.github_link").first)["href"]
                 puts "  "+colorize(repo_desc,32)
                 puts "  github:"+github_link
