@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
-gem  'faraday'
-gem 'nokogiri'
-gem 'rubyzip'
+source 'https://rubygems.org'
+
+# Specify your gem's dependencies in ofxbundler.gemspec
+gemspec

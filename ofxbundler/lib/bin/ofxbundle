@@ -2,7 +2,7 @@
 require 'optparse'
 require 'faraday'
 require 'nokogiri'
-require './dsl.rb'
+require 'ofxbundler'
 options={}
 
 def colorize(text, color_code)
