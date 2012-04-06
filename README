@@ -2,6 +2,8 @@
 
 OfBundler help you to manager your ofx addons and version
 
+inspired by vundle and bundler
+
 ## pre-install
 
 git,
