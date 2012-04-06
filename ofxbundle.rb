@@ -39,7 +39,7 @@ OptionParser.new do |opts|
             end
             if is_found
                 repo_author = repo.css("p.author").first.text()
-                puts " "+colorize(repo_name,31)+" - by #{repo_author}"
+                puts " "+colorize(repo_name,31)+" - #{repo_author}"
                 repo_desc = repo.css("p.description em").first.text()
                 github_link = (repo.css("p.description em a.github_link").first)["href"]
                 puts "  "+colorize(repo_desc,32)
