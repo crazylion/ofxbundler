@@ -1,6 +1,7 @@
 require 'optparse'
 require 'faraday'
 require 'nokogiri'
+require './dsl.rb'
 options={}
 OptionParser.new do |opts|
     opts.banner = "Usage: example.rb [options]"
@@ -12,4 +13,9 @@ OptionParser.new do |opts|
        version = doc.css("#download-latest-header h2")
        puts "Openframeworks current version is "+ version.text
     end 
+
+    opts.on("install","install by bundler file") do |v|
+         #find bundler.file
+         OfxBundler::Dsl.evalute("OfxFile")
+    end
 end.parse!
