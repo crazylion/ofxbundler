@@ -1,29 +1,20 @@
-# Ofxbundler
+# OfxBundler
 
-TODO: Write a gem description
+OfBundler help you to manager your ofx addons and version
 
-## Installation
+inspired by vundle and bundler
 
-Add this line to your application's Gemfile:
+## pre-install
 
-    gem 'ofxbundler'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install ofxbundler
+git,
 
 ## Usage
 
-TODO: Write usage instructions here
+edit the OfxFile 
 
-## Contributing
+bundle "armadillu/ofxAnimatable"  will download this repo to ofx 
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+
+or 
+
+ofxbundle -s searhTerm  # this will return possible addons
