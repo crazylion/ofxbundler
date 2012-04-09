@@ -8,6 +8,10 @@ inspired by vundle and bundler
 
 git
 
+## install
+
+gem i ofxbunlder
+
 ## Usage
 
 ofxbundler help : list available commands
