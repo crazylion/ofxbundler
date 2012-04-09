@@ -4,6 +4,7 @@ require 'net/http'
 require 'zip/zip'
 module OfxBundler
     class Dsl
+        @@latest_version = "007"
         @@configs={
             :osx=>{
                 "007"=>
@@ -58,9 +59,7 @@ module OfxBundler
         end
 
         #install latest version
-        def ofx(opts)
-            version = opts[:version] || "007"
-            extra = opts[:extra]
+        def ofx version=@@latest_version
             response = Faraday.get do |req| 
                 req.url "http://www.openframeworks.cc/download/"
             end
@@ -74,7 +73,7 @@ module OfxBundler
                 href = config["file"]
             elsif RUBY_PLATFORM.downcase.include?("mswin")
             elsif RUBY_PLATFORM.downcase.include?("linux")
-                href = @@configs[:linux][version]["file"]
+                href = config[:file]
             end
             
 
@@ -93,6 +92,10 @@ module OfxBundler
                     end
                 end
 
+                if Dir.exists?(config["dirname"])
+                   puts "error:openframewors dir exists !!" 
+                   exit 1
+                end
                 destination="."
                 Zip::ZipFile.open("ofx.zip") {|file|
                 
@@ -112,8 +115,8 @@ module OfxBundler
         end
 
 
-        def addon name
-            config = get_config
+        def addon name,version=@@latest_version
+            config = get_config(version)
             addon_author,addon_name = name.split("/")
             if Dir.exists?("#{config["dirname"]}/addons/#{addon_name}")
                 puts "update #{name}"
