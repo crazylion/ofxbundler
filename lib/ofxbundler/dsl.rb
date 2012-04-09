@@ -4,14 +4,32 @@ require 'net/http'
 require 'zip/zip'
 module OfxBundler
     class Dsl
-        @@download_href={
+        @@configs={
             :osx=>{
-            "007"=>"http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_osx.zip",
-            "filename"=>'of_preRelease_v007_osx.zip"',
-            "dirname"=>'of_preRelease_v007_osx'
-            }
+                "007"=>
+                {
+                    "file"=>"http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_osx.zip",
+                    "filename"=>'of_preRelease_v007_osx.zip"',
+                    "dirname"=>'of_preRelease_v007_osx'
+
+                }
+            },
+            "linux"=>{
+                "007" =>{
+                "file"=> "http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_linux.tar.gz",
+                "filename"=>"of_preRelease_v007_linux.tar.gz",
+                "dirname" => "of_preRelease_v007_linux"
+                },
+                "007_64" => {
+                    "file"=> "http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_linux64.tar.gz",
+                    "filename" => "of_preRelease_v007_linux64",
+                    "dirname"=> "of_preRelease_v007_linux64"
+                }
+
+            }    
         
         }
+
         def initialize
         end
 
@@ -28,31 +46,38 @@ module OfxBundler
             instance_eval(File.read(filename))
         end
 
-        def get_config
+        def get_config version
             config=nil
             if RUBY_PLATFORM.downcase.include?("darwin")
-                config= @@download_href[:osx]
+                config= @@configs[:osx][version]
             elsif RUBY_PLATFORM.downcase.include?("mswin")
             elsif RUBY_PLATFORM.downcase.include?("linux")
+                config= @@configs[:linux][version]
             end
             config
         end
 
         #install latest version
-        def ofx(version="latest")
+        def ofx(opts)
+            version = opts[:version] || "007"
+            extra = opts[:extra]
             response = Faraday.get do |req| 
                 req.url "http://www.openframeworks.cc/download/"
             end
             doc = Nokogiri::HTML(response.body)
-            version = doc.css("#download-latest-header h2")
-            puts "Openframeworks current version is "+ version.text+"\n"
+            latest_version = doc.css("#download-latest-header h2")
+            puts "Openframeworks current version is "+ latest_version.text+"\n"
             puts "your os is "+RUBY_PLATFORM.downcase
+            config = get_config(version)
+            p config
             href=""
             if RUBY_PLATFORM.downcase.include?("darwin")
-                href = @@download_href[:osx]["007"]
+                href = config["file"]
             elsif RUBY_PLATFORM.downcase.include?("mswin")
             elsif RUBY_PLATFORM.downcase.include?("linux")
+                href = @@configs[:linux][version]["file"]
             end
+            
 
             if href!=""
                 p "downing "+href
@@ -78,6 +103,10 @@ module OfxBundler
                         file.extract(f,f_path)
                     end
                 } 
+                #cleanup
+                p "cleanup..."
+                `rm -rf __MACOSX`
+                `rm -rf ofx.zip`
 
             end
 
