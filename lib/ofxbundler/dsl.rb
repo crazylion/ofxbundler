@@ -38,8 +38,9 @@ module OfxBundler
             begin
             bundler = new
             bundler.eval_ofxfile(filename)
-            rescue
-                "OfxFile error"
+            rescue =>e
+               p  "OfxFile error"
+               p e.message
             end
         end
 
@@ -68,16 +69,10 @@ module OfxBundler
             puts "Openframeworks current version is "+ latest_version.text+"\n"
             puts "your os is "+RUBY_PLATFORM.downcase
             config = get_config(version)
-            href=""
-            if RUBY_PLATFORM.downcase.include?("darwin")
-                href = config["file"]
-            elsif RUBY_PLATFORM.downcase.include?("mswin")
-            elsif RUBY_PLATFORM.downcase.include?("linux")
-                href = config[:file]
-            end
+            href=config[:file]
             
 
-            if href!=""
+            if href and href!=""
                 p "downing "+href
                 uri = URI(href)
                 Net::HTTP.start(uri.host,uri.port) do |http|
@@ -93,29 +88,32 @@ module OfxBundler
                 end
 
                 if Dir.exists?(config["dirname"])
-                   puts "error:openframewors dir exists !!" 
-                   exit 1
+                   puts "openframewors dir exists. pass.." 
+                else
+                    puts "unzip dir.."
+                    destination="."
+                    Zip::ZipFile.open("ofx.zip") {|file|
+                    
+                        file.each do |f| 
+                            f_path = File.join(destination, f.name)
+                            FileUtils.mkdir_p(File.dirname(f_path))
+                            file.extract(f,f_path)
+                        end
+                    } 
+                    #cleanup
+                    p "cleanup..."
+                    `rm -rf __MACOSX`
+                    `rm -rf ofx.zip`
                 end
-                destination="."
-                Zip::ZipFile.open("ofx.zip") {|file|
-                
-                    file.each do |f| 
-                        f_path = File.join(destination, f.name)
-                        FileUtils.mkdir_p(File.dirname(f_path))
-                        file.extract(f,f_path)
-                    end
-                } 
-                #cleanup
-                p "cleanup..."
-                `rm -rf __MACOSX`
-                `rm -rf ofx.zip`
 
             end
 
         end
 
 
+        # install or update the addon
         def addon name,version=@@latest_version
+            p "addon"
             config = get_config(version)
             addon_author,addon_name = name.split("/")
             if Dir.exists?("#{config["dirname"]}/addons/#{addon_name}")

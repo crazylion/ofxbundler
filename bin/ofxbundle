@@ -33,6 +33,7 @@ when "list" then
     puts "Openframeworks current version is "+ version.text
 when "install" then
     OfxBundler::Dsl.evalute("OfxFile")
+    puts "ok"
 when "search" then    
     w = ARGV.shift
     response = Faraday.get do |req| 
