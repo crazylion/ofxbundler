@@ -113,7 +113,6 @@ module OfxBundler
 
         # install or update the addon
         def addon name,version=@@latest_version
-            p "addon"
             config = get_config(version)
             addon_author,addon_name = name.split("/")
             if Dir.exists?("#{config["dirname"]}/addons/#{addon_name}")
