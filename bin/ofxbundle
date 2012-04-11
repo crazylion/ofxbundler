@@ -32,8 +32,11 @@ when "list" then
     version = doc.css("#download-latest-header h2")
     puts "Openframeworks current version is "+ version.text
 when "install" then
+    begin
     OfxBundler::Dsl.evalute("OfxFile")
-    puts "ok"
+    rescue =>e
+        p e
+    end
 when "search" then    
     w = ARGV.shift
     response = Faraday.get do |req| 

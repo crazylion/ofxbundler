@@ -69,9 +69,8 @@ module OfxBundler
             puts "Openframeworks current version is "+ latest_version.text+"\n"
             puts "your os is "+RUBY_PLATFORM.downcase
             config = get_config(version)
-            href=config[:file]
+            href=config["file"]
             
-
             if href and href!=""
                 p "downing "+href
                 uri = URI(href)
