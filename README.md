@@ -10,7 +10,7 @@ git
 
 ## install
 
-gem i ofxbunlder
+gem i ofxbundler
 
 ## Usage
 
