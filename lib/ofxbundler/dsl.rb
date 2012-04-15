@@ -86,7 +86,7 @@ module OfxBundler
                     end
                 end
 
-                if Dir.exists?(config["dirname"])
+                if File.exists?(config["dirname"])
                    puts "openframewors dir exists. pass.." 
                 else
                     puts "unzip dir.."
