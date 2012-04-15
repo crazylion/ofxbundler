@@ -78,7 +78,7 @@ module OfxBundler
                     request = Net::HTTP::Get.new uri.request_uri
 
                     http.request request do |response|
-                        open 'ofx.zip', 'w' do |io|
+                        open config["filename"], 'w' do |io|
                             response.read_body do |chunk|
                                 io.write chunk
                             end
@@ -89,20 +89,25 @@ module OfxBundler
                 if File.exists?(config["dirname"])
                    puts "openframewors dir exists. pass.." 
                 else
-                    puts "unzip dir.."
-                    destination="."
-                    Zip::ZipFile.open("ofx.zip") {|file|
-                    
-                        file.each do |f| 
-                            f_path = File.join(destination, f.name)
-                            FileUtils.mkdir_p(File.dirname(f_path))
-                            file.extract(f,f_path)
-                        end
-                    } 
-                    #cleanup
-                    p "cleanup..."
-                    `rm -rf __MACOSX`
-                    `rm -rf ofx.zip`
+
+                    if RUBY_PLATFORM.downcase.include?("darwin")
+                        puts "unzip dir.."
+                        destination="."
+                        Zip::ZipFile.open(config["filename"]) {|file|
+
+                            file.each do |f| 
+                                f_path = File.join(destination, f.name)
+                                FileUtils.mkdir_p(File.dirname(f_path))
+                                file.extract(f,f_path)
+                            end
+                        } 
+                        #cleanup
+                        p "cleanup..."
+                        `rm -rf __MACOSX`
+                        `rm -rf ofx.zip`
+                    elsif RUBY_PLATFORM.downcase.include?("linux")
+                        `tar vzxf #{config["filename"]}`
+                    end
                 end
 
             end
@@ -114,12 +119,12 @@ module OfxBundler
         def addon name,version=@@latest_version
             config = get_config(version)
             addon_author,addon_name = name.split("/")
-            if Dir.exists?("#{config["dirname"]}/addons/#{addon_name}")
+            if File.exists?("#{config["dirname"]}/addons/#{addon_name}")
                 puts "update #{name}"
                 `cd #{config["dirname"]}/addons/#{addon_name} && git pull` 
             else
                 puts "clone #{name}"
-               `cd #{config["dirname"]}/addons && git clone https://github.com/#{name}.git` 
+                `cd #{config["dirname"]}/addons && git clone https://github.com/#{name}.git` 
             end
         end
     end
