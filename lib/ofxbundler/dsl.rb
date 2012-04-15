@@ -15,7 +15,7 @@ module OfxBundler
 
                 }
             },
-            "linux"=>{
+            :linux=>{
                 "007" =>{
                 "file"=> "http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_linux.tar.gz",
                 "filename"=>"of_preRelease_v007_linux.tar.gz",

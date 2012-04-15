@@ -6,6 +6,8 @@ inspired by vundle and bundler
 
 ## pre-install
 
+ruby (1.9.2 is better), rubygems
+
 git
 
 ## install
@@ -24,7 +26,7 @@ ofxbundler search keywork: searching addons by keyword
 
 ## Edit the OfxFile 
 
-ofx "007"   #  download version 007 and unzip it. not support older version yet.
+ofx "007"   #  download version 007 and unzip it. Older version is not supported yet.
 
 addon "armadillu/ofxAnimatable"  #  download/update this repo to ofx 
 
