@@ -2,4 +2,4 @@
 ofx "007"  # this line will donwload the ofx 007 version
 # ofx "007_64"  # this line will donwload the ofx 007_64 version (linux only)
 
-#addon "armadillu/ofxAnimatable"   # this line will download the this addons from github
+addon "armadillu/ofxAnimatable"   # this line will download the this addons from github

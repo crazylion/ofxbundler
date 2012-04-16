@@ -31,7 +31,11 @@ module OfxBundler
         
         }
 
+
+
         def initialize
+            p "initialize"
+            self.config = get_config();
         end
 
         def self.evalute(filename)
