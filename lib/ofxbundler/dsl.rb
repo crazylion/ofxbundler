@@ -4,6 +4,7 @@ require 'net/http'
 require 'zip/zip'
 module OfxBundler
     class Dsl
+        attr_accessor :_version
         @@latest_version = "007"
         @@configs={
             :osx=>{
@@ -23,7 +24,7 @@ module OfxBundler
                 },
                 "007_64" => {
                     "file"=> "http://www.openframeworks.cc/versions/preRelease_v0.07/of_preRelease_v007_linux64.tar.gz",
-                    "filename" => "of_preRelease_v007_linux64",
+                    "filename" => "of_preRelease_v007_linux64.tar.gz",
                     "dirname"=> "of_preRelease_v007_linux64"
                 }
 
@@ -34,8 +35,7 @@ module OfxBundler
 
 
         def initialize
-            p "initialize"
-            self.config = get_config();
+            self._version = @@latest_version
         end
 
         def self.evalute(filename)
@@ -65,6 +65,7 @@ module OfxBundler
 
         #install latest version
         def ofx version=@@latest_version
+            self._version=version
             response = Faraday.get do |req| 
                 req.url "http://www.openframeworks.cc/download/"
             end
@@ -91,7 +92,7 @@ module OfxBundler
                 end
 
                 if File.exists?(config["dirname"])
-                   puts "openframewors dir exists. pass.." 
+                   puts "openframewors dir #{config['dirname']} exists. pass.." 
                 else
 
                     if RUBY_PLATFORM.downcase.include?("darwin")
@@ -110,6 +111,7 @@ module OfxBundler
                         `rm -rf __MACOSX`
                         `rm -rf ofx.zip`
                     elsif RUBY_PLATFORM.downcase.include?("linux")
+                        p "tar file... #{config['filename']}"
                         `tar vzxf #{config["filename"]}`
                     end
                 end
@@ -121,7 +123,7 @@ module OfxBundler
 
         # install or update the addon
         def addon name,version=@@latest_version
-            config = get_config(version)
+            config = get_config(self._version)
             addon_author,addon_name = name.split("/")
             if File.exists?("#{config["dirname"]}/addons/#{addon_name}")
                 puts "update #{name}"
